@@ -42,4 +42,7 @@ Yes, but only in the range 30000-32767
 
 Will CoreDNS fix DNS issues?  YES
 
+Redis
+docker run -p6379:6379 redis
+
 

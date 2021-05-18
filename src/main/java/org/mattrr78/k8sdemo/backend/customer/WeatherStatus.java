@@ -1,8 +1,9 @@
 package org.mattrr78.k8sdemo.backend.customer;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class WeatherStatus {
+public class WeatherStatus implements Serializable {
 
     private String city;
 
