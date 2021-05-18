@@ -20,7 +20,7 @@ spec:
             claimName: k8sdemo-backend-pvc
       containers:
         - name: k8sdemo-backend
-          image: docker.io/library/k8sdemo-backend:v1.0.0
+          image: docker.io/library/k8sdemo-backend:v1.1.0
           volumeMounts:
             - mountPath: "/config"
               name: pv-storage
