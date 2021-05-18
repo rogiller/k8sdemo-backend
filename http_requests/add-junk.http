@@ -1,0 +1,1 @@
+POST http://localhost:9110/k8sdemo/backend/customer/junk/100000

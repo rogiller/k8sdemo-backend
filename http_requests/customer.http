@@ -1,0 +1,1 @@
+GET http://localhost:9110/k8sdemo/backend/customer/weather/1

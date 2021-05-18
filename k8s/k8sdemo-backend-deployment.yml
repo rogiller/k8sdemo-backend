@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: k8sdemo-backend
+  name: k8sdemo-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8sdemo-backend
+  template:
+    metadata:
+      labels:
+        app: k8sdemo-backend
+    spec:
+      volumes:
+        - name: pv-storage
+          persistentVolumeClaim:
+            claimName: k8sdemo-backend-pvc
+      dnsPolicy: Default
+      containers:
+        - name: k8sdemo-backend
+          image: docker.io/library/k8sdemo-backend:v1.0.0
+          volumeMounts:
+            - mountPath: "/config"
+              name: pv-storage
+          resources:
+            limits:
+              memory: "128M"
