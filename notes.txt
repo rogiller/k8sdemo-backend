@@ -1,3 +1,8 @@
+microk8s.status
+microk8s.enable dns
+microk8s.enable host-access
+microk8s.enable metrics-server
+
 docker build . -t k8sdemo-integration:v1.0.0
 docker run -p 9120:9120 --net=host k8sdemo-integration:1.0.0
 
@@ -28,13 +33,13 @@ docker ps -a
 docker container rm CONTAINER_ID
 docker image rm k8sdemo-backend:v1.0.0
 
-microk8s.status
-microk8s.enable metrics-server
+curl "http://localhost:31110/k8sdemo/backend/customer/weather/1"
+curl -X POST "http://localhost:31110/k8sdemo/backend/customer/junk/100000"
+curl -X DELETE "http://localhost:31110/k8sdemo/backend/customer/junk"
 
-Questions
-host-access addon creates host ip address with 10.0.1.1.  Does this work?
 Can I set whatever port I want for a service's nodePort?
-Will 192 MB finally be enough ram for backend?
-Will CoreDNS fix DNS issues?
+Yes, but only in the range 30000-32767
+
+Will CoreDNS fix DNS issues?  YES
 
 

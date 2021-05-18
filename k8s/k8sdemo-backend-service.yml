@@ -6,7 +6,8 @@ metadata:
   name: k8sdemo-backend
 spec:
   ports:
-    - port: 9110
+    - nodePort: 31110
+      port: 9110
       protocol: TCP
       targetPort: 9110
   selector:

@@ -27,9 +27,7 @@ public class CustomerController {
     @GetMapping("/weather/{customerId}")
     ResponseEntity<WeatherStatus> findWeatherStatusByCustomerId(@PathVariable int customerId)  {
         WeatherStatus weatherStatus = service.findWeatherStatusByCustomerId(customerId);
-        long memTotalInMB = (Runtime.getRuntime().totalMemory() / 1024L) / 1024L;
-        long memUsedInMB = ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024L ) / 1024L;
-        LOG.info("Total: " + memTotalInMB + "MB,  Used: " + memUsedInMB + "MB.");
+        logMemory("After customer fetch");
         return ResponseEntity.ok(weatherStatus);
     }
 
@@ -38,7 +36,21 @@ public class CustomerController {
         for (int i = 0; i < count; i++)  {
             junkList.add(new JunkClass());
         }
+        logMemory("After adding junk to memory");
         return ResponseEntity.ok(true);
+    }
+
+    @DeleteMapping("/junk")
+    ResponseEntity<Boolean> deleteJunk()  {
+        junkList.clear();
+        logMemory("After clearing junk");
+        return ResponseEntity.ok(true);
+    }
+
+    private void logMemory(String message)  {
+        long memTotalInMB = (Runtime.getRuntime().totalMemory() / 1024L) / 1024L;
+        long memUsedInMB = ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024L ) / 1024L;
+        LOG.info(message + " => Total: " + memTotalInMB + "MB,  Used: " + memUsedInMB + "MB.");
     }
 
 }
