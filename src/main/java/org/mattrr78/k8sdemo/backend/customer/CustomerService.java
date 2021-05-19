@@ -32,7 +32,7 @@ public class CustomerService {
         }
 
         Optional<Customer> optionalCustomer = repo.findById(customerId);
-        if (optionalCustomer.isEmpty()) {
+        if (!optionalCustomer.isPresent()) {
             throw new IllegalArgumentException("Customer with id '" + customerId + "' not found.");
         }
 

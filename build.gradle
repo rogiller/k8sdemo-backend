@@ -6,7 +6,6 @@ plugins {
 
 group = 'org.mattrr78'
 version = '1.0.0'
-sourceCompatibility = '13'
 
 repositories {
     mavenCentral()

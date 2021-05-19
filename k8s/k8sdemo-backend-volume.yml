@@ -11,4 +11,4 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/k8sdemo/backend/config"
+    path: "/k8sdemo/k8sdemo-backend/config"
