@@ -45,4 +45,6 @@ Will CoreDNS fix DNS issues?  YES
 Redis
 docker run -p6379:6379 redis
 
+iptables -P FORWARD ACCEPT
+
 
