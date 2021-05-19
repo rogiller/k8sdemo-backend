@@ -47,7 +47,7 @@ kubectl apply -f k8sdemo-integration-service.yml
 
 curl "http://localhost:31120/k8sdemo/integration/weather?city=Carlisle&state=Pennsylvania&country=US"
 
-Are we entirely done with k8sdemo-integration and can close IntelliJ?
+Entirely done with k8sdemo-integration and can close IntelliJ for k8sdemo-integration
 
 On Mac:
 Gradle Build
@@ -77,5 +77,7 @@ curl -X DELETE "http://localhost:31110/k8sdemo/backend/customer/junk"
 
 Can I set whatever port I want for a service's nodePort?
 Yes, but only in the range 30000-32767
+
+iptables -P FORWARD ACCEPT
 
 
