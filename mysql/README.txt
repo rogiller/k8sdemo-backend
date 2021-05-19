@@ -10,5 +10,6 @@ mysql -u k8sdemo -p
 
 Run:
 create database k8sdemo;
+use k8sdemo;
 
 Run customer.sql script

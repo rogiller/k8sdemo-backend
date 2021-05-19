@@ -1,29 +1,14 @@
-microk8s.status
-microk8s.enable dns
-microk8s.enable host-access
-microk8s.enable metrics-server
-
-docker build . -t k8sdemo-integration:v1.0.0
-docker run -p 9120:9120 --net=host k8sdemo-integration:1.0.0
-
-docker save k8sdemo-integration:v1.0.0 > k8sdemo-integration_v1.0.0.tar
-microk8s ctr image import k8sdemo-integration_v1.0.0.tar
-microk8s.ctr images ls
-
-kubectl apply -f k8sdemo-integration-volume.yml
-kubectl apply -f k8sdemo-integration-volume-claim.yml
-kubectl apply -f k8sdemo-integration-pod.yml
-kubectl apply -f k8sdemo-integration-service.yml
-
-kubectl exec k8sdemo-integration -it -- /bin/sh
-    ping 8.8.8.8
-    ping www.google.com
-
-
 docker build . -t k8sdemo-backend:v1.1.0
 docker run -p 9110:9110 --net=host k8sdemo-backend:v1.1.0
 docker save k8sdemo-backend:v1.1.0 > k8sdemo-backend_v1.1.0.tar
 microk8s ctr image import k8sdemo-backend_v1.1.0.tar
+
+Change version to 1.1.0
+Add k8sdemo.redis.url=redis://redis:6379 to application.properties
+kubectl apply -f k8sdemo-backend-deployment.yml
+
+kubectl apply -f redis-pod.yml
+kubectl apply -f redis-pod.yml
 
 microk8s.ctr containers ls
 microk8s.ctr images ls
@@ -34,16 +19,9 @@ docker container rm CONTAINER_ID
 docker image rm k8sdemo-backend:v1.1.0
 
 curl "http://localhost:31110/k8sdemo/backend/customer/weather/1"
-curl -X POST "http://localhost:31110/k8sdemo/backend/customer/junk/100000"
-curl -X DELETE "http://localhost:31110/k8sdemo/backend/customer/junk"
-
-Can I set whatever port I want for a service's nodePort?
-Yes, but only in the range 30000-32767
-
-Will CoreDNS fix DNS issues?  YES
 
 Redis
-docker run -p6379:6379 redis
+docker run -p 6379:6379 redis
 
 iptables -P FORWARD ACCEPT
 

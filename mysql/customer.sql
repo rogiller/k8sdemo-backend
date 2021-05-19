@@ -11,4 +11,4 @@ create table customer
 );
 
 INSERT INTO customer (first_name, last_name, city, state, country)
-VALUES ('Matthew', 'Rosenberger', 'Lititz', 'Pennsylvania', 'US');
+VALUES ('Matthew', 'Rosenberger', 'Carlisle', 'Pennsylvania', 'US');
