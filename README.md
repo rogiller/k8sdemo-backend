@@ -24,15 +24,14 @@ Install Docker:  https://docs.docker.com/engine/install/ubuntu/
 
 Then run the following to install microk8s:  `snap install microk8s --classic`
 
-With MySQL running, refer to k8sdemo-backend/mysql/README.txt to setup k8sdemo account, database, and customer table.
+With MySQL running, refer to `k8sdemo-backend/mysql/README.txt` to setup k8sdemo account, database, and customer table.
 
 Create a shortcut to kubectl:
 
 `echo "alias kubectl='microk8s.kubectl'" > ~/.bash_aliases`
 `. ~/.bash_aliases`
 
-Run the following to view addons enabled/disabled
-microk8s.status
+Run the following to view addons enabled/disabled: `microk8s.status`
 
 Enable the following microk8s addons
 
