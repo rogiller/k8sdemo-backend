@@ -171,4 +171,16 @@ Wait a couple of minutes, and a 3rd pod should be invoked!
 
 ## Redis
 
-In the v1.1.0 branch of this repo, I have a demo that uses Redis.
+In the `v1.1.0` branch of this repo, I have a demo that uses Redis.  To use this Redis version:
+
+* check that branch out
+* build the jar
+* Docker-ize the new 1.1.0 jar using version 1.1.0 
+* save out the Docker image
+* import the Docker image tar file into microk8s.
+* Add the following to backend's application.properties file:
+  `k8sdemo.redis.url=redis://localhost:6379`
+* Change version in `/k8sdemo/k8sdemo-backend/k8s/k8sdemo-backend-deployment.yml` to 1.1.0
+* Run `kubectl apply -f /k8sdemo/k8sdemo-backend/k8s/k8sdemo-backend-deployment.yml`
+
+API calls after the first one will now run after because weather and address info will be cached in Redis.
