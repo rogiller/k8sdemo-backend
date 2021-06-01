@@ -1,12 +1,12 @@
 ## Introduction
 This repo is the source for a Kubernetes (k8s for now on) demo I did at work.  This README contains the full content of that demo.
 
-The demo is a single k8s node running a main backend pod and an integration pod.  The backend pod hosts the Rest API that
+The demo is a single k8s node running a main backend deployment and an integration pod.  The backend app hosts the Rest API that
 queries a MySQL database running on the host VirtualBox for a customer record by ID.  The customer's address information
 is then sent to the integration app.  The integration app hosts a Rest API that will fetch weather information from
 https://openweathermap.org/ and return a subset of the weather data.
 
-These projects can be found here:
+These projects can be checked out locally by calling:
 
 git clone https://github.com/mattrr78/k8sdemo-backend
 
@@ -31,7 +31,7 @@ Create a shortcut to kubectl:
 `echo "alias kubectl='microk8s.kubectl'" > ~/.bash_aliases`
 `. ~/.bash_aliases`
 
-Run the following to view addons enabled/disabled: `microk8s.status`
+Run the following to view enabled/disabled addons: `microk8s.status`
 
 Enable the following microk8s addons
 
@@ -39,7 +39,7 @@ Enable the following microk8s addons
 
 `microk8s.enable host-access` To connect to the host MySQL database by using host's static IP address of 10.0.1.1.
 
-`microk8s.enable metrics-server` To gather pod metrics that will be used by kubectl top pod and HorizontalPodAutoScaler.
+`microk8s.enable metrics-server` To gather pod metrics that will be used by `kubectl top pod` and HorizontalPodAutoScaler.
 
 Create the following directory structure and copy artifacts to your VirtualBox's shared folder and then copy from shared
 folder to the below directory structure (do not make /k8sdemo the shared folder):
@@ -85,12 +85,12 @@ Then run:
 
 `microk8s.ctr images ls | grep k8sdemo` To confirm that the Docker images have been loaded into microk8s 
 (microk8s prepends `docker.io/library/` when importing Docker images locally).  If you make a mistake, run
-`microk8s.ctr images rm docker.io/library/IMAGE-NAME:IMAGE-VERSION` and try again.
+`microk8s.ctr images rm docker.io/library/<IMAGE-NAME>:<IMAGE-VERSION>` and try again.
 
 ## application.properties setup
 
 application.properties will exist outside k8s.  We will create a PersistentVolume and PersistentVolumeClaim so pods
-can access the config/ directory.
+can access the host's `config/` directory.
 
 In `/k8sdemo/k8sdemo-backend/config` directory, create application.properties file and add:
 ```
@@ -113,7 +113,7 @@ kubectl apply -f /k8sdemo/k8sdemo-integration/k8s
 ```
 
 We started a pod vs. starting a deployment because this pod will not be scaled.
-After a few seconds, the k8s-integration app should be running inside of k8s.  Run `kubectl logs k8sdemo-integration`
+After a few seconds, the k8s-integration app should be running inside k8s.  Run `kubectl logs k8sdemo-integration`
 to verify.
 
 Now run the following to shell into the pod:  `kubectl exec k8sdemo-integration -it -- /bin/sh`
@@ -124,9 +124,10 @@ ping 8.8.8.8
 ping www.google.com
 ```
 
-If there was a problem with pinging, exit the shell, run `iptables -P FORWARD ACCEPT`, shell in again and ping.
+If there was a problem with pinging, exit the shell (ctrl+d), run `iptables -P FORWARD ACCEPT`, shell in again and ping.
 
-If we were able to ping both 8.8.8.8 (Google's primary DNS server) and www.google.com, then we can proceed.  Run
+If we were able to ping both 8.8.8.8 (Google's primary DNS server) and www.google.com, then we can proceed.  
+Exit out of the shell (ctrl+d) and run:
 `curl "http://localhost:31120/k8sdemo/integration/weather?city=Chicago&state=Illinois&country=US"`  If you get back
 weather information, then k8sdemo-integration was a success!  31120 is the node port we're exposing from k8s to the 
 host defined in the service YAML file (Port range must be 30000-32767).  
@@ -173,14 +174,15 @@ Wait a couple of minutes, and a 3rd pod should be invoked!
 
 In the `v1.1.0` branch of this repo, I have a demo that uses Redis.  To use this Redis version:
 
-* check that branch out
-* build the jar
+* Check out that branch out, build the jar, and copy the jar
 * Docker-ize the new 1.1.0 jar using version 1.1.0 
 * save out the Docker image
 * import the Docker image tar file into microk8s.
 * Add the following to backend's application.properties file:
-  `k8sdemo.redis.url=redis://localhost:6379`
+  `k8sdemo.redis.url=redis://redis:6379`
 * Change version in `/k8sdemo/k8sdemo-backend/k8s/k8sdemo-backend-deployment.yml` to 1.1.0
+* Before applying the change, run `kubectl diff -f /k8sdemo/k8sdemo-backend/k8s/k8sdemo-backend-deployment.yml` to
+  observe differences between deployed version and our changed version of the YAML file.
 * Run `kubectl apply -f /k8sdemo/k8sdemo-backend/k8s/k8sdemo-backend-deployment.yml`
 
-API calls after the first one will now run after because weather and address info will be cached in Redis.
+API calls after the first one will now run faster because weather and address info will be cached in Redis.
