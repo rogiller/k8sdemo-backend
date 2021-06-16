@@ -28,8 +28,7 @@ With MySQL running, refer to `k8sdemo-backend/mysql/README.txt` to setup k8sdemo
 
 Create a shortcut to kubectl:
 
-`echo "alias kubectl='microk8s.kubectl'" > ~/.bash_aliases`
-`. ~/.bash_aliases`
+`echo "alias kubectl='microk8s.kubectl'" > ~/.bash_aliases && . ~/.bash_aliases`
 
 Run the following to view enabled/disabled addons: `microk8s.status`
 
